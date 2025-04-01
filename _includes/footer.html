@@ -38,7 +38,7 @@ function checkQuiz(quizId, correctAnswers) {
   let selected = [];
   inputs.forEach(input => {
     if (input.checked) {
-      selected.push(parseInt(input.value));
+      selected.push(input.value);
     }
   });
   
@@ -48,25 +48,41 @@ function checkQuiz(quizId, correctAnswers) {
     return;
   }
   
-  // Для одиночного выбора преобразуем в массив
-  if (!Array.isArray(correctAnswers)) {
-    correctAnswers = [correctAnswers];
+  // Преобразуем строку правильных ответов в массив
+  const correctAnswersArray = correctAnswers.split('|').map(String);
+  
+  // Для одиночного выбора
+  if (quiz.querySelector('input[type="radio"]')) {
+    const isCorrect = selected.length === 1 && correctAnswersArray.includes(selected[0]);
+    if (isCorrect) {
+      feedback.textContent = "✓ Правильно!";
+      feedback.style.color = "green";
+    } else {
+      feedback.textContent = "✗ Неправильно. Попробуйте ещё раз.";
+      feedback.style.color = "red";
+    }
+  } 
+  // Для множественного выбора
+  else {
+    // Сортируем для сравнения (порядок не важен)
+    selected.sort();
+    const correctSorted = [...correctAnswersArray].sort();
+    
+    const isCorrect = selected.length === correctSorted.length && 
+                     selected.every((val, index) => val === correctSorted[index]);
+    
+    if (isCorrect) {
+      feedback.textContent = "✓ Все верно!";
+      feedback.style.color = "green";
+    } else {
+      feedback.textContent = "✗ Не все ответы правильные. Попробуйте ещё раз.";
+      feedback.style.color = "red";
+    }
   }
   
-  // Сортируем для сравнения (для множественного выбора порядок не важен)
-  selected.sort();
-  const correctSorted = [...correctAnswers].sort();
-  
-  // Проверяем массивы на равенство
-  const isCorrect = selected.length === correctSorted.length && 
-                   selected.every((val, index) => val === correctSorted[index]);
-  
-  if (isCorrect) {
-    feedback.textContent = "Правильно!";
-    feedback.style.color = "green";
-  } else {
-    feedback.textContent = "Неправильно. Попробуйте ещё раз.";
-    feedback.style.color = "red";
+  // Перерендерим формулы в feedback (на случай, если там есть LaTeX)
+  if (window.renderMathInElement) {
+    renderMathInElement(feedback);
   }
 }
 </script>
