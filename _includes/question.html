@@ -1,0 +1,41 @@
+{% assign chapter_num = 0 %}
+{% for chapter in site.custom.chapters %}
+  {% if page.url contains chapter.slug %}
+    {% assign chapter_num = forloop.index %}
+  {% endif %}
+{% endfor %}
+
+{% assign question_num = 1 %}
+{% if site.data.questions[page.slug] %}
+  {% assign question_num = site.data.questions[page.slug] | plus: 1 %}
+{% endif %}
+
+{% capture new_question_num %}{{ chapter_num }}.{{ question_num }}{% endcapture %}
+
+<div class="question" id="question-{{ new_question_num }}">
+  <div class="question-header">
+    <span class="question-title">Вопрос {{ new_question_num }}</span>
+  </div>
+  <div class="question-content">
+    {{ include.content | markdownify }}
+  </div>
+</div>
+
+{% assign question_data = site.data.questions | default: {} %}
+{% assign question_data = question_data | hash_merge: { page.slug: question_num } %}
+{% assign questions = question_data | to_json %}
+<script type="text/json" id="questions-data">{{ questions }}</script>
+
+<style>
+.question {
+  border-left: 4px solid #ff9800;
+  padding: 10px 15px;
+  margin: 20px 0;
+  background-color: #f5f5f5;
+}
+.question-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #ff9800;
+}
+</style>
