@@ -25,8 +25,9 @@
       {% endfor %}
     {% endif %}
     
-    <button type="button" class="quiz-submit" onclick="checkQuiz('quiz-{{ include.id }}', '{{ include.answer }}')">Проверить</button>
+    <button type="button" class="quiz-submit" onclick="checkQuiz('quiz-{{ include.id }}', '{{ include.answer }}', '{{ include.hint | default: "" }}')">Проверить</button>
     <div class="quiz-feedback"></div>
+    <div class="quiz-hint" style="display: none; margin-top: 10px; padding: 10px; background-color: #fffde7; border-left: 4px solid #ffd600;"></div>
   </form>
 </div>
 
@@ -68,7 +69,19 @@
   margin-top: 10px;
   font-weight: bold;
 }
+.quiz-hint {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fffde7;
+  border-left: 4px solid #ffd600;
+}
 .katex-display {
   margin: 0.5em 0;
+}
+.show-hint {
+  color: #2196F3;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
 }
 </style>
