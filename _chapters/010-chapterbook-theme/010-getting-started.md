@@ -6,7 +6,7 @@ abstract: A guide to quickly setting up your site with this theme.
 
 This is an example chapter page.
 
-Рассмотрим формулу $\forall x Sx$
+Рассмотрим формулу \\(\\forall x Sx\\)
 
 {% include quiz.html 
   id="3" 
