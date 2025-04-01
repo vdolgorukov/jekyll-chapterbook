@@ -14,17 +14,14 @@ This is an example chapter page.
   answer="1" 
 %}
 
-### Вопрос 2 (матрицы)
 
 {% include quiz.html 
   id="4" 
   type="multiple" 
-  question="Какие из этих утверждений верны для матриц?" 
-  options="\\(AB \\neq BA\\) в общем случае|\\((AB)^T = B^T A^T\\)|\\(\\det(AB) = \\det(A)\\det(B)\\)|\\(A^{-1} = \\frac{1}{A}\\)" 
+  question="В каких мирах мирах выполняется формула \\(\\Box p \wedge \neg p\\)?" 
+  options="\\(w_1|w_2|w_3|w_4\\)" 
   answer="1|2|3" 
 %}
-
-### Вопрос 3 (сложная формула)
 
 {% include quiz.html 
   id="5" 
