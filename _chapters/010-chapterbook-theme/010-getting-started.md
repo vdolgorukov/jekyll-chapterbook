@@ -6,6 +6,8 @@ abstract: A guide to quickly setting up your site with this theme.
 
 This is an example chapter page.
 
+Рассмотрим формулу $\forall x Sx$
+
 {% include quiz.html 
   id="3" 
   type="single" 
@@ -34,6 +36,24 @@ This is an example chapter page.
   question="Что представляет собой формула \\(\\frac{d}{dx} \\left( \\frac{u}{v} \\right) = \\frac{v \\frac{du}{dx} - u \\frac{dv}{dx}}{v^2}\\)?" 
   options="Правило дифференцирования частного|Правило дифференцирования произведения|Цепное правило" 
   answer="1" 
+%}
+
+{% include quiz.html 
+  id="6" 
+  type="single" 
+  question="Чему равна производная \\(\\frac{d}{dx} \\sin(x)\\)?" 
+  options="\\(\\cos(x)\\)|\\(-\\cos(x)\\)|\\(\\sin(x)\\)" 
+  answer="1" 
+  hint="Вспомните основные правила дифференцирования тригонометрических функций. Производная синуса равна косинусу." 
+%}
+
+{% include quiz.html 
+  id="7" 
+  type="multiple" 
+  question="Какие из этих утверждений верны для квадратных матриц?" 
+  options="\\(\\det(A^T) = \\det(A)\\)|\\(\\det(AB) = \\det(A) + \\det(B)\\)|\\(\\det(A^{-1}) = 1/\\det(A)\\)" 
+  answer="1|3" 
+  hint="Определитель произведения матриц равен произведению определителей. Определитель транспонированной матрицы равен определителю исходной." 
 %}
 
 [Learn more about getting started with this theme.]({{ site.baseurl }}/index.html#getting-started)
