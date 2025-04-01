@@ -29,6 +29,48 @@
 <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 -->
 
+<script>
+function checkQuiz(quizId, correctAnswers) {
+  const quiz = document.getElementById(quizId);
+  const inputs = quiz.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+  const feedback = quiz.querySelector('.quiz-feedback');
+  
+  let selected = [];
+  inputs.forEach(input => {
+    if (input.checked) {
+      selected.push(parseInt(input.value));
+    }
+  });
+  
+  if (selected.length === 0) {
+    feedback.textContent = "Пожалуйста, выберите ответ";
+    feedback.style.color = "red";
+    return;
+  }
+  
+  // Для одиночного выбора преобразуем в массив
+  if (!Array.isArray(correctAnswers)) {
+    correctAnswers = [correctAnswers];
+  }
+  
+  // Сортируем для сравнения (для множественного выбора порядок не важен)
+  selected.sort();
+  const correctSorted = [...correctAnswers].sort();
+  
+  // Проверяем массивы на равенство
+  const isCorrect = selected.length === correctSorted.length && 
+                   selected.every((val, index) => val === correctSorted[index]);
+  
+  if (isCorrect) {
+    feedback.textContent = "Правильно!";
+    feedback.style.color = "green";
+  } else {
+    feedback.textContent = "Неправильно. Попробуйте ещё раз.";
+    feedback.style.color = "red";
+  }
+}
+</script>
+
 {% if site.extra_footer_js %}
 {%- for extra_js in site.extra_header_js -%}
 {%- assign starts_with = extra_js | slice: 0,4  -%}
@@ -39,3 +81,4 @@
 {%- endif -%}
 {%- endfor -%}
 {% endif %}
+
