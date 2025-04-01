@@ -8,6 +8,25 @@ abstract: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmo
 
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+{% include quiz.html 
+  id="1" 
+  type="single" 
+  question="Чему равно \\(\\int x^2 dx\\)?" 
+  options="\\(\\frac{x^3}{3} + C\\)|x^3 + C|2x + C" 
+  answer="1" 
+%}
+
+### Вопрос 2 (несколько правильных ответов)
+
+{% include quiz.html 
+  id="2" 
+  type="multiple" 
+  question="Какие из этих функций являются квадратичными?" 
+  options="\\(x^2\\)|\\(x^2 + 2x + 1\\)|\\(\\sin(x)\\)|\\(x^3\\)" 
+  answer="1|2" 
+%}
+
+
 ## Finibus Bonorum
 
 Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. 
