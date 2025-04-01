@@ -19,8 +19,8 @@ This is an example chapter page.
   id="4" 
   type="multiple" 
   question="В каких мирах мирах выполняется формула \\(\\Box p \wedge \neg p\\)?" 
-  options="\\(w_1|w_2|w_3|w_4\\)" 
-  answer="1|2|3" 
+  options="\\(w_1\\)|\\(w_2\\)|\\(w_3\\)|\\(w_4\\)|\\(w_5\\)" 
+  answer="1|2|5" 
 %}
 
 {% include quiz.html 
