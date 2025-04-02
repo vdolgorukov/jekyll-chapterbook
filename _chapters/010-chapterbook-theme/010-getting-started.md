@@ -8,21 +8,31 @@ slug: "chapter1"
 
 
 {% include quiz.html 
-  id="6" 
+  id="3" 
   type="single" 
-  question="Чему равна производная \\(\\frac{d}{dx} \\sin(x)\\)?" 
-  options="\\(\\cos(x)\\)|\\(-\\cos(x)\\)|\\(\\sin(x)\\)" 
+  question="Чему равен интеграл \\(\\int e^x dx\\)?" 
+  options="\\(e^x + C\\)|\\(x e^x + C\\)|\\(\\frac{e^{x+1}}{x+1} + C\\)" 
   answer="1" 
-  hint="Вспомните основные правила дифференцирования тригонометрических функций. Производная синуса равна косинусу." 
 %}
 
+### Вопрос 2 (матрицы)
+
 {% include quiz.html 
-  id="7" 
+  id="4" 
   type="multiple" 
-  question="Какие из этих утверждений верны для квадратных матриц?" 
-  options="\\(\\det(A^T) = \\det(A)\\)|\\(\\det(AB) = \\det(A) + \\det(B)\\)|\\(\\det(A^{-1}) = 1/\\det(A)\\)" 
-  answer="1|3" 
-  hint="Определитель произведения матриц равен произведению определителей. Определитель транспонированной матрицы равен определителю исходной." 
+  question="Какие из этих утверждений верны для матриц?" 
+  options="\\(AB \\neq BA\\) в общем случае|\\((AB)^T = B^T A^T\\)|\\(\\det(AB) = \\det(A)\\det(B)\\)|\\(A^{-1} = \\frac{1}{A}\\)" 
+  answer="1|2|3" 
+%}
+
+### Вопрос 3 (сложная формула)
+
+{% include quiz.html 
+  id="5" 
+  type="single" 
+  question="Что представляет собой формула \\(\\frac{d}{dx} \\left( \\frac{u}{v} \\right) = \\frac{v \\frac{du}{dx} - u \\frac{dv}{dx}}{v^2}\\)?" 
+  options="Правило дифференцирования частного|Правило дифференцирования произведения|Цепное правило" 
+  answer="1" 
 %}
 
 [Learn more about getting started with this theme.]({{ site.baseurl }}/index.html#getting-started)
