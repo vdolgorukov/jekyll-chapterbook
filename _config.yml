@@ -146,10 +146,3 @@ kramdown:
 syntax_highlighter_style: colorful
 markdown_ext:     markdown,mkdown,mkdn,mkd,md
 
-
-custom:
-  chapters:
-    - title: "Глава 1"
-      slug: "chapter1"
-    - title: "Глава 2" 
-      slug: "chapter2"
