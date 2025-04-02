@@ -112,23 +112,7 @@ function toggleHint(quizId) {
 }
 </script>
 
-<script>
-// Сохранение счетчиков упражнений и вопросов
-document.addEventListener('DOMContentLoaded', function() {
-  // Для упражнений
-  const exercisesData = JSON.parse(document.getElementById('exercises-data').textContent);
-  localStorage.setItem('exercisesData', JSON.stringify(exercisesData));
-  
-  // Для вопросов
-  const questionsData = JSON.parse(document.getElementById('questions-data').textContent);
-  localStorage.setItem('questionsData', JSON.stringify(questionsData));
-  
-  // Инициализация KaTeX для новых элементов
-  if (window.renderMathInElement) {
-    renderMathInElement(document.body);
-  }
-});
-</script>
+
 
 {% if site.extra_footer_js %}
 {%- for extra_js in site.extra_header_js -%}
