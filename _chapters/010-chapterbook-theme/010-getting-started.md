@@ -6,35 +6,6 @@ slug: "chapter1"
 
 Рассмотрим формулу \\(\\forall x Sx\\)
 
-{% include quiz.html 
-  id="3" 
-  type="single" 
-  question="Чему равен интеграл \\(\\int e^x dx\\)?" 
-  options="\\(e^x + C\\)|\\(x e^x + C\\)|\\(\\frac{e^{x+1}}{x+1} + C\\)" 
-  answer="1" 
-%}
-
-{% include figure.html
-    caption="Модель"
-    url="/assets/demo/Kripke model.png"
-    class="row"
-%}
-
-{% include quiz.html 
-  id="4" 
-  type="multiple" 
-  question="В каких мирах мирах модели на рис. выше выполняется формула \\(\\Box p \wedge \neg p\\)?" 
-  options="\\(w_1\\)|\\(w_2\\)|\\(w_3\\)|\\(w_4\\)|\\(w_5\\)" 
-  answer="1|2|5" 
-%}
-
-{% include quiz.html 
-  id="5" 
-  type="single" 
-  question="Что представляет собой формула \\(\\frac{d}{dx} \\left( \\frac{u}{v} \\right) = \\frac{v \\frac{du}{dx} - u \\frac{dv}{dx}}{v^2}\\)?" 
-  options="Правило дифференцирования частного|Правило дифференцирования произведения|Цепное правило" 
-  answer="1" 
-%}
 
 {% include quiz.html 
   id="6" 
