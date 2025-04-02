@@ -1,0 +1,398 @@
+---
+layout: page
+title: Тест по модальной логике
+permalink: /modal-logic-quiz/
+---
+
+<div class="modal-quiz-container">
+  <h2>Проверка выполнимости модальной формулы</h2>
+  
+  <button id="generate-btn" class="btn">Сгенерировать задание</button>
+  
+  <div class="model-display">
+    <div id="kripke-graph" style="width: 100%; height: 300px;"></div>
+    <div id="valuations-display"></div>
+  </div>
+  
+  <div id="formula-display" class="formula-display"></div>
+  
+  <div class="quiz-section">
+    <h3>В каких мирах выполняется формула?</h3>
+    <div id="options-container"></div>
+    <button id="check-btn" class="btn" disabled>Проверить</button>
+    <div id="feedback"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const generateBtn = document.getElementById('generate-btn');
+  const checkBtn = document.getElementById('check-btn');
+  const formulaDisplay = document.getElementById('formula-display');
+  const optionsContainer = document.getElementById('options-container');
+  const feedback = document.getElementById('feedback');
+  const valuationsDisplay = document.getElementById('valuations-display');
+  
+  let currentModel = {};
+  let currentFormula = '';
+  let correctAnswer = [];
+  let network = null;
+  
+  generateBtn.addEventListener('click', generateTask);
+  checkBtn.addEventListener('click', checkAnswers);
+  
+  function generateTask() {
+    // Генерация модели Крипке
+    currentModel = generateKripkeModel();
+    visualizeKripkeModel(currentModel);
+    displayValuations(currentModel);
+    
+    // Генерация случайной формулы
+    const {formula, answer} = generateModalFormula(currentModel);
+    currentFormula = formula;
+    correctAnswer = answer;
+    
+    formulaDisplay.innerHTML = `Формула: <strong>${currentFormula}</strong>`;
+    
+    // Генерация вариантов ответа
+    generateOptions(currentModel.worlds);
+    
+    checkBtn.disabled = false;
+    feedback.innerHTML = '';
+  }
+  
+  function generateKripkeModel() {
+    const worlds = ['w1', 'w2', 'w3', 'w4'];
+    const relations = [];
+    const valuations = {};
+    
+    // Случайные отношения доступности (меньше связей для лучшей визуализации)
+    for (let i = 0; i < worlds.length; i++) {
+      // Гарантируем хотя бы одно исходящее отношение
+      const j = Math.floor(Math.random() * worlds.length);
+      relations.push([worlds[i], worlds[j]]);
+      
+      // Добавляем случайные дополнительные отношения
+      for (let k = 0; k < worlds.length; k++) {
+        if (k !== j && Math.random() > 0.7) {
+          relations.push([worlds[i], worlds[k]]);
+        }
+      }
+    }
+    
+    // Случайные оценки пропозициональных переменных
+    const props = ['p', 'q', 'r'];
+    worlds.forEach(world => {
+      valuations[world] = {};
+      props.forEach(prop => {
+        valuations[world][prop] = Math.random() > 0.5;
+      });
+    });
+    
+    return { worlds, relations, valuations };
+  }
+  
+  function visualizeKripkeModel(model) {
+    const container = document.getElementById('kripke-graph');
+    
+    // Создаем узлы графа
+    const nodes = new vis.DataSet(
+      model.worlds.map(world => ({
+        id: world,
+        label: world,
+        shape: 'circle',
+        color: {
+          background: '#e3f2fd',
+          border: '#2196F3',
+          highlight: {
+            background: '#bbdefb',
+            border: '#2196F3'
+          }
+        },
+        font: { size: 16 }
+      }))
+    );
+    
+    // Создаем ребра графа
+    const edges = new vis.DataSet(
+      model.relations.map(([from, to], i) => ({
+        id: `e${i}`,
+        from: from,
+        to: to,
+        arrows: 'to',
+        smooth: {
+          type: 'curvedCW',
+          roundness: 0.2
+        }
+      }))
+    );
+    
+    // Конфигурация графа
+    const data = { nodes, edges };
+    const options = {
+      layout: {
+        randomSeed: 1, // Для стабильности при перегенерации
+        improvedLayout: true
+      },
+      physics: {
+        enabled: true,
+        stabilization: {
+          iterations: 100
+        }
+      },
+      edges: {
+        color: '#64B5F6',
+        width: 2,
+        arrowStrikethrough: false
+      },
+      nodes: {
+        borderWidth: 2,
+        size: 30,
+        shadow: true
+      }
+    };
+    
+    // Уничтожаем предыдущий граф если есть
+    if (network) {
+      network.destroy();
+    }
+    
+    // Создаем новый граф
+    network = new vis.Network(container, data, options);
+  }
+  
+  function displayValuations(model) {
+    let html = '<h3>Оценки переменных:</h3><div class="valuations-grid">';
+    
+    model.worlds.forEach(world => {
+      html += `<div class="valuation-box"><strong>${world}:</strong><ul>`;
+      
+      for (const prop in model.valuations[world]) {
+        const value = model.valuations[world][prop];
+        html += `<li>${prop} = ${value ? '⊤' : '⊥'}</li>`;
+      }
+      
+      html += '</ul></div>';
+    });
+    
+    html += '</div>';
+    valuationsDisplay.innerHTML = html;
+  }
+  
+  function generateModalFormula(model) {
+    const operators = ['□', '◇', '∧', '∨', '→', '¬'];
+    const variables = Object.keys(model.valuations[model.worlds[0]]);
+    
+    // Простые формулы (переменные и их отрицания)
+    const atomicFormulas = [
+      ...variables,
+      ...variables.map(v => `¬${v}`)
+    ];
+    
+    // Случайная формула глубины 1-2
+    let formula;
+    if (Math.random() > 0.5) {
+      // Модальная формула
+      const op = Math.random() > 0.5 ? '□' : '◇';
+      const subFormula = atomicFormulas[Math.floor(Math.random() * atomicFormulas.length)];
+      formula = `${op}(${subFormula})`;
+    } else {
+      // Булева комбинация
+      const op = ['∧', '∨', '→'][Math.floor(Math.random() * 3)];
+      const left = atomicFormulas[Math.floor(Math.random() * atomicFormulas.length)];
+      const right = atomicFormulas[Math.floor(Math.random() * atomicFormulas.length)];
+      formula = `(${left} ${op} ${right})`;
+    }
+    
+    // Вычисляем, в каких мирах формула истинна
+    const answer = model.worlds.filter(world => 
+      evaluateFormula(formula, world, model)
+    );
+    
+    return { formula, answer };
+  }
+  
+  function evaluateFormula(formula, world, model) {
+    // Удаляем внешние скобки если есть
+    if (formula.startsWith('(') && formula.endsWith(')')) {
+      formula = formula.slice(1, -1);
+    }
+    
+    // Модальные операторы
+    if (formula.startsWith('□')) {
+      const subFormula = formula.slice(1);
+      const reachable = model.relations
+        .filter(([from]) => from === world)
+        .map(([_, to]) => to);
+      
+      // Если нет достижимых миров, □φ считается истинным
+      if (reachable.length === 0) return true;
+      
+      return reachable.every(to => evaluateFormula(subFormula, to, model));
+    }
+    
+    if (formula.startsWith('◇')) {
+      const subFormula = formula.slice(1);
+      const reachable = model.relations
+        .filter(([from]) => from === world)
+        .map(([_, to]) => to);
+      
+      // Если нет достижимых миров, ◇φ считается ложным
+      if (reachable.length === 0) return false;
+      
+      return reachable.some(to => evaluateFormula(subFormula, to, model));
+    }
+    
+    // Булевы операторы
+    if (formula.includes('∧')) {
+      const [left, right] = formula.split(' ∧ ');
+      return evaluateFormula(left, world, model) && evaluateFormula(right, world, model);
+    }
+    
+    if (formula.includes('∨')) {
+      const [left, right] = formula.split(' ∨ ');
+      return evaluateFormula(left, world, model) || evaluateFormula(right, world, model);
+    }
+    
+    if (formula.includes('→')) {
+      const [left, right] = formula.split(' → ');
+      return !evaluateFormula(left, world, model) || evaluateFormula(right, world, model);
+    }
+    
+    // Отрицание
+    if (formula.startsWith('¬')) {
+      return !evaluateFormula(formula.slice(1), world, model);
+    }
+    
+    // Пропозициональная переменная
+    return model.valuations[world][formula] || false;
+  }
+  
+  function generateOptions(worlds) {
+    optionsContainer.innerHTML = '';
+    worlds.forEach(world => {
+      const div = document.createElement('div');
+      div.className = 'quiz-option';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = `world-${world}`;
+      checkbox.value = world;
+      
+      const label = document.createElement('label');
+      label.htmlFor = `world-${world}`;
+      label.textContent = world;
+      
+      div.appendChild(checkbox);
+      div.appendChild(label);
+      optionsContainer.appendChild(div);
+    });
+  }
+  
+  function checkAnswers() {
+    const selected = [];
+    document.querySelectorAll('#options-container input:checked').forEach(input => {
+      selected.push(input.value);
+    });
+    
+    // Сравниваем массивы без учета порядка
+    const isCorrect = selected.length === correctAnswer.length &&
+                     selected.every(world => correctAnswer.includes(world)) &&
+                     correctAnswer.every(world => selected.includes(world));
+    
+    if (isCorrect) {
+      feedback.innerHTML = '<span style="color: green;">✓ Правильно!</span>';
+    } else {
+      feedback.innerHTML = `<span style="color: red;">✗ Неправильно. Правильные миры: ${correctAnswer.join(', ')}</span>`;
+    }
+  }
+});
+</script>
+
+<style>
+.modal-quiz-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.model-display {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+#kripke-graph {
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.valuations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.valuation-box {
+  padding: 8px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.valuation-box ul {
+  margin: 5px 0 0 0;
+  padding-left: 20px;
+}
+
+.formula-display {
+  font-size: 1.2em;
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #e3f2fd;
+  border-radius: 5px;
+}
+
+.quiz-section {
+  margin-top: 30px;
+}
+
+.quiz-option {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.quiz-option input {
+  margin-right: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-bottom: 15px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+.btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+#feedback {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+}
+</style>
