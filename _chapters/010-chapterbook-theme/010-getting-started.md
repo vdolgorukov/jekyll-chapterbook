@@ -4,36 +4,6 @@ abstract: A guide to quickly setting up your site with this theme.
 slug: "chapter1"
 ---
 
-## Определения
-
-{% include definition.html num="1" content="
-**Производная** функции в точке — это предел отношения приращения функции к приращению аргумента при стремлении приращения аргумента к нулю:
-
-\\[ f'(x) = \\lim_{\\Delta x \\to 0} \\frac{f(x+\\Delta x) - f(x)}{\\Delta x} \\]
-" %}
-
-## Упражнения
-
-{% include exercise.html content="
-Найдите производную функции \\( f(x) = x^2 + 3x - 5 \\).
-" %}
-
-{% include exercise.html content="
-Докажите, что производная суммы функций равна сумме производных.
-" %}
-
-## Вопросы
-
-{% include question.html content="
-Каков геометрический смысл производной?
-" %}
-
-{% include question.html content="
-Как связаны непрерывность и дифференцируемость функции?
-" %}
-
-This is an example chapter page.
-
 Рассмотрим формулу \\(\\forall x Sx\\)
 
 {% include quiz.html 
