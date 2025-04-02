@@ -1,7 +1,7 @@
 ---
-title: Getting started
+title: Test
 slug: getting-started
-abstract: A guide to quickly setting up your site with this theme.
+abstract: 
 ---
 
 This is an example chapter page.
